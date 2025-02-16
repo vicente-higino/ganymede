@@ -4781,6 +4781,8 @@ const docTemplate = `{
                     "enum": [
                         "best",
                         "source",
+                        "1440p60",
+                        "1080p60",
                         "720p60",
                         "480p30",
                         "360p30",
@@ -5475,6 +5477,8 @@ const docTemplate = `{
                     "enum": [
                         "best",
                         "source",
+                        "1440p60",
+                        "1080p60",
                         "720p60",
                         "480p30",
                         "360p30",
