@@ -5,31 +5,31 @@ go 1.23.0
 toolchain go1.23.2
 
 require (
-	entgo.io/ent v0.14.1
+	entgo.io/ent v0.14.3
 	github.com/alexedwards/scs/pgxstore v0.0.0-20240316134038-7e11d57e8885
 	github.com/alexedwards/scs/v2 v2.8.0
 	github.com/canidam/echo-scs-session v1.0.0
 	github.com/coreos/go-oidc/v3 v3.12.0
-	github.com/gavv/httpexpect/v2 v2.16.0
-	github.com/go-jose/go-jose/v4 v4.0.4
-	github.com/go-playground/validator/v10 v10.24.0
+	github.com/gavv/httpexpect/v2 v2.17.0
+	github.com/go-jose/go-jose/v4 v4.0.5
+	github.com/go-playground/validator/v10 v10.25.0
 	github.com/golang-jwt/jwt/v4 v4.5.1
 	github.com/google/uuid v1.6.0
 	github.com/joho/godotenv v1.5.1
 	github.com/labstack/echo/v4 v4.13.3
 	github.com/lib/pq v1.10.9
 	github.com/patrickmn/go-cache v2.1.0+incompatible
-	github.com/prometheus/client_golang v1.20.5
-	github.com/riverqueue/river v0.16.0
-	github.com/riverqueue/river/rivertype v0.16.0
+	github.com/prometheus/client_golang v1.21.1
+	github.com/riverqueue/river v0.18.0
+	github.com/riverqueue/river/rivertype v0.18.0
 	github.com/rs/zerolog v1.33.0
-	github.com/sethvargo/go-envconfig v1.1.0
+	github.com/sethvargo/go-envconfig v1.1.1
 	github.com/swaggo/swag v1.16.4
 	github.com/testcontainers/testcontainers-go v0.35.0
 	github.com/testcontainers/testcontainers-go/modules/postgres v0.35.0
-	golang.org/x/crypto v0.33.0
-	golang.org/x/oauth2 v0.26.0
-	riverqueue.com/riverui v0.8.0
+	golang.org/x/crypto v0.36.0
+	golang.org/x/oauth2 v0.28.0
+	riverqueue.com/riverui v0.8.1
 )
 
 require (
@@ -89,8 +89,8 @@ require (
 	github.com/opencontainers/go-digest v1.0.0 // indirect
 	github.com/opencontainers/image-spec v1.1.0 // indirect
 	github.com/power-devops/perfstat v0.0.0-20240221224432-82ca36839d55 // indirect
-	github.com/riverqueue/river/riverdriver v0.16.0 // indirect
-	github.com/riverqueue/river/rivershared v0.16.0 // indirect
+	github.com/riverqueue/river/riverdriver v0.18.0 // indirect
+	github.com/riverqueue/river/rivershared v0.18.0 // indirect
 	github.com/sanity-io/litter v1.5.5 // indirect
 	github.com/sergi/go-diff v1.0.0 // indirect
 	github.com/shirou/gopsutil/v3 v3.24.5 // indirect
@@ -103,7 +103,7 @@ require (
 	github.com/tidwall/sjson v1.2.5 // indirect
 	github.com/tklauser/go-sysconf v0.3.14 // indirect
 	github.com/tklauser/numcpus v0.9.0 // indirect
-	github.com/valyala/fasthttp v1.34.0 // indirect
+	github.com/valyala/fasthttp v1.40.0 // indirect
 	github.com/xeipuuv/gojsonpointer v0.0.0-20190905194746-02993c407bfb // indirect
 	github.com/xeipuuv/gojsonreference v0.0.0-20180127040603-bd5ef7bd5415 // indirect
 	github.com/xeipuuv/gojsonschema v1.2.0 // indirect
@@ -111,6 +111,7 @@ require (
 	github.com/yudai/gojsondiff v1.0.0 // indirect
 	github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82 // indirect
 	github.com/yusufpapurcu/wmi v1.2.4 // indirect
+	github.com/zclconf/go-cty-yaml v1.1.0 // indirect
 	go.opentelemetry.io/auto/sdk v1.1.0 // indirect
 	go.opentelemetry.io/contrib/instrumentation/net/http/otelhttp v0.58.0 // indirect
 	go.opentelemetry.io/otel v1.33.0 // indirect
@@ -119,8 +120,8 @@ require (
 	go.opentelemetry.io/otel/sdk v1.21.0 // indirect
 	go.opentelemetry.io/otel/trace v1.33.0 // indirect
 	go.uber.org/goleak v1.3.0 // indirect
-	golang.org/x/sync v0.11.0 // indirect
-	golang.org/x/tools v0.28.0 // indirect
+	golang.org/x/sync v0.12.0 // indirect
+	golang.org/x/tools v0.30.0 // indirect
 	gopkg.in/fsnotify.v1 v1.4.7 // indirect
 	gopkg.in/tomb.v1 v1.0.0-20141024135613-dd632973f1e7 // indirect
 	gopkg.in/yaml.v2 v2.4.0 // indirect
@@ -128,7 +129,7 @@ require (
 )
 
 require (
-	ariga.io/atlas v0.29.1 // indirect
+	ariga.io/atlas v0.31.1-0.20250212144724-069be8033e83 // indirect
 	github.com/agext/levenshtein v1.2.3 // indirect
 	github.com/beorn7/perks v1.0.1 // indirect
 	github.com/cespare/xxhash/v2 v2.3.0 // indirect
@@ -148,20 +149,20 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/pmezard/go-difflib v1.0.1-0.20181226105442-5d4384ee4fb2 // indirect
 	github.com/prometheus/client_model v0.6.1 // indirect
-	github.com/prometheus/common v0.61.0 // indirect
+	github.com/prometheus/common v0.62.0 // indirect
 	github.com/prometheus/procfs v0.15.1 // indirect
-	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.16.0
+	github.com/riverqueue/river/riverdriver/riverpgxv5 v0.18.0
 	github.com/robfig/cron/v3 v3.0.1
 	github.com/stretchr/testify v1.10.0
 	github.com/swaggo/echo-swagger v1.4.1
 	github.com/valyala/bytebufferpool v1.0.0 // indirect
 	github.com/valyala/fasttemplate v1.2.2 // indirect
 	github.com/zclconf/go-cty v1.15.1 // indirect
-	golang.org/x/mod v0.22.0 // indirect
-	golang.org/x/net v0.34.0 // indirect
-	golang.org/x/sys v0.30.0 // indirect
-	golang.org/x/text v0.22.0 // indirect
+	golang.org/x/mod v0.23.0 // indirect
+	golang.org/x/net v0.35.0 // indirect
+	golang.org/x/sys v0.31.0 // indirect
+	golang.org/x/text v0.23.0 // indirect
 	golang.org/x/time v0.8.0 // indirect
-	google.golang.org/protobuf v1.36.0 // indirect
+	google.golang.org/protobuf v1.36.1 // indirect
 	gopkg.in/yaml.v3 v3.0.1 // indirect
 )
