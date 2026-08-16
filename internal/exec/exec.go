@@ -27,7 +27,8 @@ import (
 )
 
 const (
-	archiveShutdownTimeout = 300 * time.Second
+	archiveShutdownTimeout        = 300 * time.Second
+	liveArchiveFinalizeFFmpegArgs = "-c:v copy -c:a copy"
 
 	archiveProcessForwarder = `
 forward_term() {
@@ -44,18 +45,23 @@ exit $?
 `
 )
 
-func appendFFmpegLiveOutputStreamArgs(args []string, audioOnly bool) []string {
+func appendFFmpegLiveOutputStreamArgs(args []string, audioOnly bool, outputArgs []string) []string {
 	streamMap := "0"
 	if audioOnly {
 		streamMap = "0:a"
 	}
 
-	return append(args,
+	args = append(args,
 		"-map", streamMap,
 		"-dn",
 		"-ignore_unknown",
 		"-c", "copy",
 	)
+
+	// FFmpeg output options are scoped to the next output. Keep copy as the
+	// baseline so unspecified streams are preserved, then append user options
+	// last so configured codecs override it for the primary archive output.
+	return append(args, outputArgs...)
 }
 
 func appendYtDlpVideoConfigArgs(args []string, configArgs string) []string {
@@ -307,18 +313,18 @@ func DownloadTwitchLiveVideo(ctx context.Context, video ent.Vod, channel ent.Cha
 		"-timeout", "30000000", // 30 second timeout for ffmpeg to connect/read before it gives up and retries
 		"-i", qualitiesURI[closestQuality],
 	}
-	ffmpegArgs = appendFFmpegLiveOutputStreamArgs(ffmpegArgs, audioOnly)
-
 	// Decide archive format.
 	archivingAsMP4 := (video.VideoHlsPath == "")
 
-	// Append user-defined (global) params before outputs
+	// Parse user-defined output params once, then scope them to the primary
+	// archive output below.
 	videoConvertString := config.Get().Parameters.VideoConvert
 	videoConvertArgs := strings.Fields(videoConvertString)
-	ffmpegArgs = append(ffmpegArgs, videoConvertArgs...)
 
 	// Archive output
 	if archivingAsMP4 {
+		ffmpegArgs = appendFFmpegLiveOutputStreamArgs(ffmpegArgs, audioOnly, videoConvertArgs)
+
 		// Archive to crash-tolerant MPEG-TS while live; finalize to MP4 in post-process.
 		ffmpegArgs = append(ffmpegArgs,
 			"-f", "mpegts",
@@ -335,7 +341,7 @@ func DownloadTwitchLiveVideo(ctx context.Context, video ent.Vod, channel ent.Cha
 			segmentPattern := fmt.Sprintf("%s/%s_segment%%06d.ts", video.TmpVideoHlsPath, video.ExtID)
 
 			ffmpegArgs = append(ffmpegArgs,
-				appendFFmpegLiveOutputStreamArgs(nil, audioOnly)...,
+				appendFFmpegLiveOutputStreamArgs(nil, audioOnly, nil)...,
 			)
 			ffmpegArgs = append(ffmpegArgs,
 				"-start_number", "0",
@@ -358,7 +364,7 @@ func DownloadTwitchLiveVideo(ctx context.Context, video ent.Vod, channel ent.Cha
 		segmentPattern := fmt.Sprintf("%s/%s_segment%%06d.ts", video.TmpVideoHlsPath, video.ExtID)
 
 		ffmpegArgs = append(ffmpegArgs,
-			appendFFmpegLiveOutputStreamArgs(nil, audioOnly)...,
+			appendFFmpegLiveOutputStreamArgs(nil, audioOnly, videoConvertArgs)...,
 		)
 		ffmpegArgs = append(ffmpegArgs,
 			"-start_number", "0",
@@ -537,8 +543,27 @@ func ConvertVideoToHLS(ctx context.Context, video ent.Vod) error {
 }
 
 func PostProcessVideo(ctx context.Context, video ent.Vod) error {
-	env := config.GetEnvConfig()
 	configFfmpegArgs := config.Get().Parameters.VideoConvert
+	return postProcessVideoWithFFmpegArgs(ctx, video, postProcessVideoOutputArgs(configFfmpegArgs, false))
+}
+
+// FinalizeLiveVideo remuxes the already converted live MPEG-TS archive to MP4.
+// The configured video conversion arguments were applied by the live FFmpeg
+// process, so applying them again here would encode the complete stream twice.
+func FinalizeLiveVideo(ctx context.Context, video ent.Vod) error {
+	configFfmpegArgs := config.Get().Parameters.VideoConvert
+	return postProcessVideoWithFFmpegArgs(ctx, video, postProcessVideoOutputArgs(configFfmpegArgs, true))
+}
+
+func postProcessVideoOutputArgs(configFfmpegArgs string, liveArchive bool) string {
+	if liveArchive {
+		return liveArchiveFinalizeFFmpegArgs
+	}
+	return configFfmpegArgs
+}
+
+func postProcessVideoWithFFmpegArgs(ctx context.Context, video ent.Vod, configFfmpegArgs string) error {
+	env := config.GetEnvConfig()
 
 	// open log file
 	logFilePath := fmt.Sprintf("%s/%s-video-convert.log", env.LogsDir, video.ID.String())

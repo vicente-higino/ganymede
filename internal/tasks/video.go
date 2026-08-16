@@ -200,7 +200,11 @@ func (w PostProcessVideoWorker) Work(ctx context.Context, job *river.Job[PostPro
 	}
 
 	if shouldPostProcessVideo {
-		err = exec.PostProcessVideo(ctx, dbItems.Video)
+		if dbItems.Queue.LiveArchive {
+			err = exec.FinalizeLiveVideo(ctx, dbItems.Video)
+		} else {
+			err = exec.PostProcessVideo(ctx, dbItems.Video)
+		}
 		if err != nil {
 			return err
 		}

@@ -32,7 +32,7 @@ Ganymede allows archiving of past streams (VODs) and live streams with a real-ti
   - Allows watching channels for archiving past broadcasts and live streams. Includes advanced filtering options.
 - Twitch VOD/Livestream support.
 - Full VOD, Channel, and User management.
-- Custom post-download video FFmpeg parameters.
+- Custom FFmpeg output parameters (applied during live recording and after VOD downloads).
 - Custom chat render parameters.
 - Webhook notifications.
 - Simple file structure for long-term archival that will outlast Ganymede.

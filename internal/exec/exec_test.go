@@ -166,6 +166,17 @@ func TestNormalizedPostProcessVideoFFmpegArgsResetEachStream(t *testing.T) {
 	t.Fatalf("normalized FFmpeg arguments do not reset stream timestamps: %v", args)
 }
 
+func TestPostProcessVideoOutputArgs(t *testing.T) {
+	configured := "-c:v libx264 -preset ultrafast -c:a copy"
+
+	if got := postProcessVideoOutputArgs(configured, false); got != configured {
+		t.Fatalf("VOD post-process arguments = %q, want configured arguments %q", got, configured)
+	}
+	if got := postProcessVideoOutputArgs(configured, true); got != liveArchiveFinalizeFFmpegArgs {
+		t.Fatalf("live finalization arguments = %q, want stream-copy arguments %q", got, liveArchiveFinalizeFFmpegArgs)
+	}
+}
+
 func TestPostProcessVideoNormalizesAnomalousContainerTimeline(t *testing.T) {
 	tmpDir := t.TempDir()
 	inputPath := createTimestampOffsetMedia(t, tmpDir, "mp4")
@@ -488,27 +499,34 @@ func Test_extractSharedChatArgs(t *testing.T) {
 
 func Test_appendFFmpegLiveOutputStreamArgs(t *testing.T) {
 	tests := []struct {
-		name      string
-		audioOnly bool
-		want      []string
+		name                 string
+		audioOnly            bool
+		configuredOutputArgs []string
+		want                 []string
 	}{
 		{
-			name:      "all streams",
+			name:      "default copies all streams",
 			audioOnly: false,
 			want:      []string{"-map", "0", "-dn", "-ignore_unknown", "-c", "copy"},
 		},
 		{
-			name:      "audio only",
+			name:      "default copies audio only",
 			audioOnly: true,
 			want:      []string{"-map", "0:a", "-dn", "-ignore_unknown", "-c", "copy"},
+		},
+		{
+			name:                 "explicit non-default encoder overrides copy baseline",
+			audioOnly:            false,
+			configuredOutputArgs: []string{"-c:v", "libx264", "-preset", "ultrafast", "-c:a", "copy"},
+			want:                 []string{"-map", "0", "-dn", "-ignore_unknown", "-c", "copy", "-c:v", "libx264", "-preset", "ultrafast", "-c:a", "copy"},
 		},
 	}
 
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			got := appendFFmpegLiveOutputStreamArgs(nil, tt.audioOnly)
+			got := appendFFmpegLiveOutputStreamArgs(nil, tt.audioOnly, tt.configuredOutputArgs)
 			if !reflect.DeepEqual(got, tt.want) {
-				t.Errorf("appendFFmpegLiveOutputStreamArgs(nil, %t) = %v, want %v", tt.audioOnly, got, tt.want)
+				t.Errorf("appendFFmpegLiveOutputStreamArgs(nil, %t, %v) = %v, want %v", tt.audioOnly, tt.configuredOutputArgs, got, tt.want)
 			}
 		})
 	}

@@ -298,7 +298,7 @@
       "twitchTokenLabel": "Twitch Token",
       "twitchTokenDescription": "Supply your Twitch token for downloading ad-free live streams and subscriber-only VODs.",
       "convertFFmpegArgsLabel": "Video Convert FFmpeg Arguments",
-      "convertFFmpegArgsDescription": "Custom FFmpeg arguments to use when converting the video. This is used for both live and VOD archives.",
+      "convertFFmpegArgsDescription": "Custom FFmpeg output arguments. Live archives apply them while recording; VOD archives apply them after downloading.",
       "ytdlpVideoArgsLabel": "YT-DLP Video Arguments",
       "ytdlpVideoArgsDescription": "Custom yt-dlp arguments to use when downloading a video. This is only used for VOD downloads.",
       "liveStreamTitle": "Live Stream",

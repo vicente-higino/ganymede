@@ -14,3 +14,12 @@ func TestSetDefaultsEnablesNFOGeneration(t *testing.T) {
 
 	require.True(t, cfg.Archive.GenerateNFOFiles)
 }
+
+func TestSetDefaultsUsesStreamCopyForVideoConversion(t *testing.T) {
+	t.Parallel()
+
+	var cfg Config
+	cfg.SetDefaults()
+
+	require.Equal(t, "-c:v copy -c:a copy", cfg.Parameters.VideoConvert)
+}

@@ -16,7 +16,7 @@ type Config struct {
 	RegistrationEnabled bool `json:"registration_enabled"`         // Enable registration.
 	Parameters          struct {
 		TwitchToken  string `json:"twitch_token"`  // Twitch token for ad-free live streams or subscriber-only videos.
-		VideoConvert string `json:"video_convert"` // FFmpeg arguments for video conversion.
+		VideoConvert string `json:"video_convert"` // FFmpeg output arguments applied during live recording or VOD post-processing.
 		ChatRender   string `json:"chat_render"`   // TwitchDownloaderCLI arguments for chat rendering.
 		YtDlpVideo   string `json:"yt_dlp_video"`  // yt-dlp arguments for video downloads.
 	} `json:"parameters"`
